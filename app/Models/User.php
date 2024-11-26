@@ -67,10 +67,57 @@ class User extends Authenticatable
         ];
     }
 
+    //relacion uno a uno con administrativo
+    public function administrativo()
+    {
+        return $this->hasOne(Administrativo::class);
+    }
+
     //administrador
     public function isAdmin()
     {
-        return $this->hasRole('admin');
+        return $this->hasRole('super-admin');
+    }
+
+    public function canIndex($modelo)
+    {
+        if ($this->isSuperAdmin()) {
+            return true;
+        } else {
+            $has_role = $this->hasAnyRole($modelo);
+            $has_permissions = $this->hasAnyPermission([$modelo . '.LISTAR', $modelo . '.MOSTRAR']);
+            return $has_permissions || $has_role;
+        }
+    }
+
+    public function canCrear($modelo)
+    {
+        if ($this->isSuperAdmin()) {
+            return true;
+        } else {
+            $has_permissions = $this->hasPermissionTo($modelo . '.CREAR');
+            return $has_permissions;
+        }
+    }
+
+    public function canEditar($modelo)
+    {
+        if ($this->isSuperAdmin()) {
+            return true;
+        } else {
+            $has_permissions = $this->hasPermissionTo($modelo . '.EDITAR');
+            return $has_permissions;
+        }
+    }
+
+    public function canEliminar($modelo)
+    {
+        if ($this->isSuperAdmin()) {
+            return true;
+        } else {
+            $has_permissions = $this->hasPermissionTo($modelo . '.ELIMINAR');
+            return $has_permissions;
+        }
     }
 
 }

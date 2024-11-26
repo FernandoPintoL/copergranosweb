@@ -34,7 +34,7 @@ function handleImageError() {
         <div
             class="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
             <div class="relative w-full ">
-                <header class="grid grid-cols-2 items-center gap-2 py-1.5 lg:grid-cols-3">
+                <header class="grid grid-cols-2 items-center gap-2 py-1.5 lg:grid-cols-3 px-10" >
                     <div class="flex lg:justify-center lg:col-start-2">
                     </div>
                     <nav v-if="canLogin" class="flex flex-1 justify-end">
@@ -51,7 +51,7 @@ function handleImageError() {
                                 :href="route('login')"
                                 class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                             >
-                                Log in
+                                Iniciar Session
                             </Link>
 
 <!--                            <Link

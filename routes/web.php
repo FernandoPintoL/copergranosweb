@@ -38,6 +38,8 @@ Route::middleware([
     })->name('dashboard');
 
     Route::resource('users', UserController::class);
+    Route::resource('roles', UserController::class);
+    Route::resource('permissions', UserController::class);
 
     Route::resource('administrativos', AdministrativoController::class);
     Route::resource('almacenes', AlmacenController::class);

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
-
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use Inertia\Inertia;
 class UserController extends Controller
 {
     /**
@@ -11,7 +14,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $listado = User::all();
+        $user = auth()->user();
+        $crear = $user->canCrear('USER');
+        $editar = $user->canEditar('USER');
+        $eliminar = $user->canEliminar('USER');
+        return Inertia::render("Users/Index", ['listado' => $listado, 'crear' => $crear, 'editar' => $editar, 'eliminar' => $eliminar]);
     }
 
     /**
