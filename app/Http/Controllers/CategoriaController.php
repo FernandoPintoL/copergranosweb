@@ -23,6 +23,7 @@ class CategoriaController extends Controller
      */
     public function index()
     {
+
         return Inertia::render('Categorias/Index', [
             'listado' => Categoria::all(),
         ]);
@@ -58,6 +59,7 @@ class CategoriaController extends Controller
      */
     public function edit(Categoria $categoria)
     {
+
         return Inertia::render('Categorias/Editar', ['model' => $categoria]);
     }
 

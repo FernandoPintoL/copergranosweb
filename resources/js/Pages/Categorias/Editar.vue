@@ -4,6 +4,8 @@ import { useForm } from '@inertiajs/inertia-vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Utils from '@/Utils/Utils.js';
 
+const route_model = "categorias"
+
 const props = defineProps({
     model: Object
 });
@@ -22,7 +24,7 @@ const input_detalle = () => {
 };
 
 const submit = () => {
-    form.put(`/categorias/${props.model.id}`);
+    form.put(`/${route_model}/${props.model.id}`);
 };
 
 const fecha = (fechaData) => {
@@ -32,10 +34,10 @@ const fecha = (fechaData) => {
 </script>
 
 <template>
-    <AppLayout title="Crear Categorias">
+    <AppLayout :title="'Crear'+route_model">
         <section class="bg-white dark:bg-gray-900">
             <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
-                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Editar categoria</h2>
+                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Editar {{ route_model }}</h2>
                 <p class="mb-4 text-gray-900 dark:text-white">Fecha Creado: {{ Utils.fecha(props.model.created_at) }}</p>
                 <p class="mb-4 text-gray-900 dark:text-white">Fecha Actualizado: {{ Utils.fecha(props.model.updated_at) }}</p>
                 <form @submit.prevent="submit">
@@ -71,7 +73,7 @@ const fecha = (fechaData) => {
                                   d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
                                   clip-rule="evenodd"></path>
                         </svg>
-                        Editar Categoria
+                        Editar {{ route_model }}
                     </button>
                 </form>
             </div>
