@@ -9,6 +9,7 @@ class Proveedor extends Model
 {
     /** @use HasFactory<\Database\Factories\ProveedorFactory> */
     use HasFactory;
+
     protected $table = 'proveedores';
     protected $fillable = [
         'persona_id',
@@ -20,5 +21,11 @@ class Proveedor extends Model
     {
         return $this->hasMany(Producto::class, 'proveedor_id', 'id');
     }
+
+    public function persona(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Persona::class, 'persona_id', 'id');
+    }
+
 
 }

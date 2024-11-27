@@ -22,7 +22,7 @@ class StoreProductoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'codido' => ['required', 'unique:productos'],
+            'codigo' => ['required', 'unique:productos'],
         ];
     }
 }

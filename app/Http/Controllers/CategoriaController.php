@@ -54,6 +54,7 @@ class CategoriaController extends Controller
     public function create()
     {
         //Gate::authorize('create', Categoria::class);
+
         return Inertia::render('Categorias/Create', [
             'crear' => $this->crear,
             'editar' => $this->editar,
