@@ -55,4 +55,8 @@ Route::middleware([
     Route::resource('productos', ProductoController::class);
     Route::resource('proveedores', ProveedorController::class);
     Route::resource('seguimientos', SeguimientoController::class);
+
+    Route::post('/categorias/search', [CategoriaController::class, 'search'])->name('categorias.search');
+    Route::post('/administrativos/search', [AdministrativoController::class, 'search'])->name('administrativos.search');
+
 });

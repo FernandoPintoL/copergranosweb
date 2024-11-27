@@ -1,14 +1,29 @@
 <script setup>
 import { defineProps } from 'vue';
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm, usePage } from '@inertiajs/inertia-vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Utils from '@/Utils/Utils.js';
 
 const route_model = "categorias"
 
 const props = defineProps({
-    model: Object
-});
+    model: Object,
+    roles: Object,
+    permissions: Object,
+    crear: {
+        type: Boolean,
+        default: false, // Valor por defecto puede ser true o false
+    },
+    editar: {
+        type: Boolean,
+        default: false, // Valor por defecto puede ser true o false
+    },
+    eliminar: {
+        type: Boolean,
+        default: false, // Valor por defecto puede ser true o false
+    },
+    flash: Object // Define flash prop
+})
 
 const form = useForm({
     sigla: props.model.sigla,
@@ -26,7 +41,6 @@ const input_detalle = () => {
 const submit = () => {
     form.put(`/${route_model}/${props.model.id}`);
 };
-
 </script>
 
 <template>
@@ -34,6 +48,10 @@ const submit = () => {
         <section class="bg-white dark:bg-gray-900">
             <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Editar {{ route_model }}</h2>
+                <!-- Display flash message -->
+                <div v-if="props.flash && props.flash.error" class="mb-4 text-red-600">
+                    {{ props.flash.error }}
+                </div>
                 <p class="mb-4 text-gray-900 dark:text-white">Fecha Creado: {{ Utils.fecha(props.model.created_at) }}</p>
                 <p class="mb-4 text-gray-900 dark:text-white">Fecha Actualizado: {{ Utils.fecha(props.model.updated_at) }}</p>
                 <form @submit.prevent="submit">

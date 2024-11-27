@@ -43,7 +43,8 @@ class CategoriaController extends Controller
             'listado' => Categoria::all(),
             'crear' => $this->crear,
             'editar' => $this->editar,
-            'eliminar' => $this->eliminar
+            'eliminar' => $this->eliminar,
+            'flash' => session('error') // Pass the flash message
         ]);
     }
 
@@ -56,7 +57,8 @@ class CategoriaController extends Controller
         return Inertia::render('Categorias/Create', [
             'crear' => $this->crear,
             'editar' => $this->editar,
-            'eliminar' => $this->eliminar
+            'eliminar' => $this->eliminar,
+            'flash' => session('error') // Pass the flash message
         ]);
     }
 
@@ -86,7 +88,9 @@ class CategoriaController extends Controller
         return Inertia::render('Categorias/Editar', ['model' => $categoria,
             'crear' => $this->crear,
             'editar' => $this->editar,
-            'eliminar' => $this->eliminar]);
+            'eliminar' => $this->eliminar,
+            'flash' => session('error') // Pass the flash message
+        ]);
     }
 
     /**

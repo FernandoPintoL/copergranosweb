@@ -1,7 +1,7 @@
 <script setup>
 import {ref, onMounted, reactive} from 'vue'
 import {Link} from '@inertiajs/vue3'
-import {useForm} from '@inertiajs/inertia-vue3';
+import {useForm, usePage} from '@inertiajs/inertia-vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Utils from '@/Utils/Utils.js';
 import Swal from 'sweetalert2';
@@ -15,16 +15,17 @@ const props = defineProps({
     },
     crear: {
         type: Boolean,
-        default: true, // Valor por defecto puede ser true o false
+        default: false, // Valor por defecto puede ser true o false
     },
     editar: {
         type: Boolean,
-        default: true, // Valor por defecto puede ser true o false
+        default: false, // Valor por defecto puede ser true o false
     },
     eliminar: {
         type: Boolean,
-        default: true, // Valor por defecto puede ser true o false
+        default: false, // Valor por defecto puede ser true o false
     },
+    flash: Object // Define flash prop
 });
 
 onMounted(() => {
@@ -50,8 +51,9 @@ const datas = reactive({
 })
 
 const search = async () => {
+    console.log(query.value)
     try {
-        const response = await axios.get(`/api/${route_model}/search`, {params: {query: query.value.toString().toUpperCase()}});
+        const response = await axios.post(route(route_model + ".search", query.value.toUpperCase()));
         datas.list = response.data;
     } catch (error) {
         console.error(error);
@@ -98,6 +100,7 @@ const destroyData = async (id) => {
         }
     })
 }
+
 </script>
 
 <template>
@@ -109,7 +112,7 @@ const destroyData = async (id) => {
                 <div
                     class="items-center justify-between block sm:flex md:divide-x md:divide-gray-100 dark:divide-gray-700">
                     <div class="flex items-center mb-4 sm:mb-0">
-                        <form class="sm:pr-3" action="#" method="GET">
+                        <div class="sm:pr-3">
                             <label :for="'table-search-'+route_model" class="sr-only">Busqueda de {{
                                     route_model
                                 }}</label>
@@ -119,15 +122,19 @@ const destroyData = async (id) => {
                                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                        :placeholder="'Busqueda de '+route_model">
                             </div>
-                        </form>
+                        </div>
                     </div>
                     <Link :href="route(route_model+'.create')"
                           v-if="props.crear"
-                            class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+                          class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
                         <i class="fa-solid fa-plus"></i>
                         Agregar {{ route_model }}
                     </Link>
                 </div>
+            </div>
+            <!-- Display flash message -->
+            <div v-if="props.flash && props.flash.error" class="mb-4 text-red-600">
+                {{ props.flash.error }}
             </div>
         </div>
         <TableList>
@@ -171,8 +178,8 @@ const destroyData = async (id) => {
                     </td>
 
                     <td class="p-4 space-x-2 whitespace-nowrap">
-                        <Link  :href="route(route_model+'.edit', item.id)"
-                               v-if="props.editar"
+                        <Link :href="route(route_model+'.edit', item.id)"
+                              v-if="props.editar"
                               class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                             <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"
                                  xmlns="http://www.w3.org/2000/svg">
