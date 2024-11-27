@@ -27,10 +27,6 @@ const submit = () => {
     form.put(`/${route_model}/${props.model.id}`);
 };
 
-const fecha = (fechaData) => {
-    return moment.tz(fechaData, 'America/La_Paz').format('YYYY-MM-DD HH:MM a')
-}
-
 </script>
 
 <template>

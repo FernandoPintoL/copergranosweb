@@ -12,6 +12,8 @@ class AdministrativoSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+
+
+
     }
 }

@@ -27,6 +27,20 @@ class PermissionsSeeder extends Seeder
         $mostrar = Permission::create(['name' => 'ROLE.MOSTRAR']);
         $listar = Permission::create(['name' => 'ROLE.LISTAR']);
 
+        //ADMINISTRATIVOS
+        $crear = Permission::create(['name' => 'ADMINISTRATIVO.CREAR']);
+        $editar = Permission::create(['name' => 'ADMINISTRATIVO.EDITAR']);
+        $eliminar = Permission::create(['name' => 'ADMINISTRATIVO.ELIMINAR']);
+        $mostrar = Permission::create(['name' => 'ADMINISTRATIVO.MOSTRAR']);
+        $listar = Permission::create(['name' => 'ADMINISTRATIVO.LISTAR']);
+
+        //CATEGORIAS
+        $crear = Permission::create(['name' => 'CATEGORIA.CREAR']);
+        $editar = Permission::create(['name' => 'CATEGORIA.EDITAR']);
+        $eliminar = Permission::create(['name' => 'CATEGORIA.ELIMINAR']);
+        $mostrar = Permission::create(['name' => 'CATEGORIA.MOSTRAR']);
+        $listar = Permission::create(['name' => 'CATEGORIA.LISTAR']);
+
 
     }
 }

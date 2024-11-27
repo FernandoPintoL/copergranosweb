@@ -1,14 +1,14 @@
 <script setup>
-import {ref} from 'vue';
-import {Link, router, useForm} from '@inertiajs/vue3';
+import { useForm} from '@inertiajs/vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
+
+const route_model = "categorias"
 
 const form = useForm({
     sigla: '',
     detalle: ''
 });
 
-const route_model = "categorias"
 
 const input_sigla = () => {
     form.sigla = form.sigla.toUpperCase();
