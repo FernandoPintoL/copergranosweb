@@ -12,6 +12,12 @@ const form = useForm({
     medida_id: '',
     proveedor_id: '',
 });
+const props = defineProps({
+
+    medidas: Array,
+    categoria: Array,
+    proveedor:Array,
+})
 
 const input_codigo = () => {
     form.codigo = form.codigo.toUpperCase();
@@ -32,7 +38,7 @@ const submit = () => {
     <AppLayout title="Crear ">
         <section class="bg-white dark:bg-gray-900">
             <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
-                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Agregar {{route_model}}}</h2>
+                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Agregar {{route_model}}</h2>
                 <form @submit.prevent="submit">
                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                         <div class="sm:col-span-2">
@@ -77,32 +83,50 @@ const submit = () => {
                         </div>
                         <div class="sm:col-span-2">
                             <label for="categoria_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Categoria</label>
-                            <input
-                                v-model="form.categoria_id"
-                                @input="input_categoria_id"
-                                type="text" name="categoria_id" id="categoria_id"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Registra la categoria" >
+                            <select id="categoria_id"
+                                    class="custom bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    v-model="form.categoria_id">
+                                <option v-for="item in props.categoria" :key="item.id" :value="item.id">
+                                    {{ item.sigla }}
+                                </option>
+                            </select>
                             <div v-if="form.errors.categoria_id" class="text-red-600 mt-2">{{ form.errors.categoria_id }}</div>
                         </div>
+                        <!-- Medida (Select) -->
                         <div class="sm:col-span-2">
-                            <label for="medida_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Medida</label>
-                            <input
-                                v-model="form.medida_id"
-                                @input="input_medida_id"
-                                type="text" name="medida_id" id="medida_id"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Registra una Medida" >
+                            <label for="medida_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                Seleccione Medida
+                            </label>
+                            <select id="medida_id"
+                                    class="custom bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    v-model="form.medida_id">
+                                <option v-for="item in props.medidas" :key="item.id" :value="item.id">
+                                  {{ item.sigla }} : {{ item.detalle }}
+                                </option>
+                            </select>
                             <div v-if="form.errors.medida_id" class="text-red-600 mt-2">{{ form.errors.medida_id }}</div>
                         </div>
+<!--                        <div class="sm:col-span-2">-->
+<!--                            <label for="medida_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Medida</label>-->
+<!--                            <input-->
+<!--                                v-model="form.medida_id"-->
+<!--                                @input="input_medida_id"-->
+<!--                                type="text" name="medida_id" id="medida_id"-->
+<!--                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"-->
+<!--                                placeholder="Registra una Medida" >-->
+<!--                            <div v-if="form.errors.medida_id" class="text-red-600 mt-2">{{ form.errors.medida_id }}</div>-->
+<!--                        </div>-->
                         <div class="sm:col-span-2">
-                            <label for="proveedor_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Proveedor</label>
-                            <input
-                                v-model="form.proveedor_id"
-                                @input="input_proveedor_id"
-                                type="text" name="proveedor" id="proveedor_id"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Registra un proveedor" >
+                            <label for="proveedor_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                Seleccione Proveedor
+                            </label>
+                            <select id="proveedor_id"
+                                    class="custom bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    v-model="form.proveedor_id">
+                                <option v-for="item in props.proveedor" :key="item.persona_id" :value="item.persona_id">
+                                    {{item.persona.nombre}}
+                                </option>
+                            </select>
                             <div v-if="form.errors.proveedor_id" class="text-red-600 mt-2">{{ form.errors.proveedor_id }}</div>
                         </div>
                     </div>

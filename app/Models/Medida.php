@@ -14,5 +14,10 @@ class Medida extends Model
         'sigla',
         'detalle'
     ];
+    public function productos(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Producto::class, 'medida_id', 'id');
+    }
+
 
 }

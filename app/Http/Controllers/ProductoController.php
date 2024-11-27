@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductoRequest;
 use App\Http\Requests\UpdateProductoRequest;
+use App\Models\Categoria;
+use App\Models\Medida;
 use App\Models\Producto;
+use App\Models\Proveedor;
 use GuzzleHttp\Psr7\Request;
 use Inertia\Inertia;
 
@@ -31,6 +34,7 @@ class ProductoController extends Controller
     }
     public function index()
     {
+
         return Inertia::render('Productos/Index', [
             'listado' => Producto::all(),
             'crear'=>$this->crear,
@@ -44,10 +48,16 @@ class ProductoController extends Controller
      */
     public function create()
     {
+        $medidas = Medida::all();
+        $categoria = Categoria::all();
+        $proveedor = Proveedor::with('persona')->get();
         return Inertia::render('Productos/Create', [
             'crear'=>$this->crear,
             'editar'=>$this->editar,
-            'eliminar'=>$this->eliminar
+            'eliminar'=>$this->eliminar,
+            'medidas'=>$medidas,
+            'categoria'=>$categoria,
+            'proveedor'=>$proveedor
         ]);
     }
 
