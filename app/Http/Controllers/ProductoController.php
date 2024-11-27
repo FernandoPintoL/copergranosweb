@@ -83,10 +83,16 @@ class ProductoController extends Controller
      */
     public function edit(Producto $producto)
     {
+        $medidas = Medida::all();
+        $categorias = Categoria::all();
+        $proveedores = Proveedor::with('persona')->get();
         return Inertia::render('Productos/Editar', ['model'=> $producto,
             'crear'=>$this->crear,
             'editar'=>$this->editar,
-            'eliminar'=>$this->eliminar
+            'eliminar'=>$this->eliminar,
+            'medidas'=>$medidas,
+            'categorias'=>$categorias,
+            'proveedores'=>$proveedores
         ]);
     }
 

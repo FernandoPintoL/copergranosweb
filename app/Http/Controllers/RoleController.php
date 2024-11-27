@@ -19,9 +19,9 @@ class RoleController extends Controller
     public function __construct()
     {
         $this->user = auth()->user();
-        $this->crear = $this->user->canCrear('ROLE');
-        $this->editar = $this->user->canEditar('ROLE');
-        $this->eliminar = $this->user->canEliminar('ROLE');
+        $this->crear = $this->user->canCrear('PERMISO');
+        $this->editar = $this->user->canEditar('PERMISO');
+        $this->eliminar = $this->user->canEliminar('PERMISO');
     }
     public function search(Request $request)
     {
@@ -64,8 +64,7 @@ class RoleController extends Controller
     {
         // crear el rol y vincular con los permisos seleccionados
         $model = Role::create([
-            'name' => $request->name,
-            'guard_name' => 'web',
+            'name' => $request->name
         ]);
         $model->syncPermissions($request->permissions);
 
@@ -85,13 +84,11 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        //roles con permisos asignados al rol mostrando solo los name
-        $role->permissions = $role->permissions->pluck('name');
+        //roles con permisos asignados
+        $role->load('permissions');
         return Inertia::render("Roles/Editar",
             [
                 'model' => $role,
-                'permissions' => Permission::all(),
-                'model_permissions' => $role->permissions,
                 'crear' => $this->crear,
                 'editar' => $this->editar,
                 'eliminar' => $this->eliminar
@@ -110,12 +107,12 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(\App\Models\Roles $role)
+    public function destroy(Role $role)
     {
         if ($role->exists) {
             $role->delete();
-            return redirect()->route('roles.index')->with('success', 'eliminado exitosamente.');
+            return redirect()->route('permissions.index')->with('flash.success', 'eliminado exitosamente.');
         }
-        return redirect()->route('roles.index')->with('error', 'No se pudo eliminar.');
+        return redirect()->route('permissions.index')->with('flash.error', 'No se pudo eliminar el administrativo.');
     }
 }
