@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePermissionRequest;
+use App\Http\Requests\UpdatePermissionRequest;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Inertia\Inertia;
@@ -11,21 +12,37 @@ use Illuminate\Support\Facades\Gate;
 
 class PermissionController extends Controller
 {
+    protected $user;
+    protected $crear;
+    protected $editar;
+    protected $eliminar;
+
+    public function __construct()
+    {
+        $this->user = auth()->user();
+        $this->crear = $this->user->canCrear('PERMISO');
+        $this->editar = $this->user->canEditar('PERMISO');
+        $this->eliminar = $this->user->canEliminar('PERMISO');
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->get('query');
+        $result = Permission::where('name', 'LIKE', "%{$query}%")->get();
+        return response()->json($result);
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $listado = Permission::all();
-        $user = auth()->user();
-        $crear = $user->canCrear('PERMISSION');
-        $editar = $user->canEditar('PERMISSION');
-        $eliminar = $user->canEliminar('PERMISSION');
         return Inertia::render("Permissions/Index", [
             'listado' => $listado,
-            'crear' => $crear,
-            'editar' => $editar,
-            'eliminar' => $eliminar
+            'crear' => $this->crear,
+            'editar' => $this->editar,
+            'eliminar' => $this->eliminar,
+            //'flash' => session('error') // Pass the flash message
         ]);
     }
 
@@ -34,12 +51,10 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        $user = auth()->user();
-        $crear = $user->canCrear('PERMISSION');
-        $editar = $user->canEditar('PERMISSION');
-        return Inertia::render("Permissions/CreateUpdate", [
-            'crear' => $crear,
-            'editar' => $editar,
+        return Inertia::render("Permissions/Create", [
+            'crear' => $this->crear,
+            'editar' => $this->editar,
+            'eliminar' => $this->eliminar
         ]);
     }
 
@@ -51,7 +66,7 @@ class PermissionController extends Controller
         $model = Permission::create([
             'name' => $request->name
         ]);
-        return redirect()->route('permissions.index');
+        return redirect()->route('permissions.index')->with('flash.success', 'Creado exitosamente.');
     }
 
     /**
@@ -68,27 +83,34 @@ class PermissionController extends Controller
     public function edit(Permission $permission)
     {
         //Gate::authorize('create', $permission);
-        $user = auth()->user();
-        $crear = $user->canCrear('PERMISSION');
-        $editar = $user->canEditar('PERMISSION');
-        return Inertia::render("Permissions/CreateUpdate", ['model' => $permission, 'crear' => $crear, 'editar' => $editar]);
+        return Inertia::render("Permissions/Editar",
+            [
+                'model' => $permission,
+                'crear' => $this->crear,
+                'editar' => $this->editar,
+                'eliminar' => $this->eliminar
+            ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Permission $permission)
+    public function update(UpdatePermissionRequest $request, Permission $permission)
     {
-        $permission->update($request->all());
-        return redirect()->route('permissions.index');
+        $permission->update($request->validated());
+        return redirect()->route('permissions.index')->with('flash.success', 'Creado exitosamente.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Permission $permission)
+    public function destroy(\App\Models\Permisos $permission)
     {
-        $permission->delete();
-        return redirect()->route('permissions.index');
+        ///return $permission;
+        if ($permission->exists) {
+            $permission->delete();
+            return redirect()->route('permissions.index')->with('flash.success', 'eliminado exitosamente.');
+        }
+        return redirect()->route('permissions.index')->with('flash.error', 'No se pudo eliminar el administrativo.');
     }
 }

@@ -68,7 +68,7 @@ class CategoriaController extends Controller
     public function store(StoreCategoriaRequest $request)
     {
         Categoria::create($request->all());
-        return redirect()->route('categorias.index');
+        return redirect()->route('categorias.index')->with('flash.success', 'Administrativo creado exitosamente.');
     }
 
     /**
@@ -101,7 +101,7 @@ class CategoriaController extends Controller
 
         //$request->validate(['nombre' => 'required']);
         $categoria->update($request->all());
-        return redirect()->route('categorias.index');
+        return redirect()->route('categorias.index')->with('flash.success', 'Administrativo creado exitosamente.');
     }
 
     /**
@@ -111,6 +111,6 @@ class CategoriaController extends Controller
     {
         //Gate::authorize('delete', $categoria);
         $categoria->delete();
-        return redirect()->route('categorias.index');
+        return redirect()->route('categorias.index')->with('flash.success', 'Administrativo creado exitosamente.');
     }
 }

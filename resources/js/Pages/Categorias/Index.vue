@@ -53,7 +53,9 @@ const datas = reactive({
 const search = async () => {
     console.log(query.value)
     try {
-        const response = await axios.post(route(route_model + ".search", query.value.toUpperCase()));
+        const response = await axios.post(route(route_model + ".search", {
+            'query': query.value.toUpperCase()
+        }));
         datas.list = response.data;
     } catch (error) {
         console.error(error);

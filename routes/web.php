@@ -38,8 +38,8 @@ Route::middleware([
     })->name('dashboard');
 
     Route::resource('users', UserController::class);
-    Route::resource('roles', UserController::class);
-    Route::resource('permissions', UserController::class);
+    Route::resource('roles', \App\Http\Controllers\RoleController::class);
+    Route::resource('permissions', \App\Http\Controllers\PermissionController::class);
 
     Route::resource('administrativos', AdministrativoController::class);
     Route::resource('almacenes', AlmacenController::class);
@@ -58,5 +58,6 @@ Route::middleware([
 
     Route::post('/categorias/search', [CategoriaController::class, 'search'])->name('categorias.search');
     Route::post('/administrativos/search', [AdministrativoController::class, 'search'])->name('administrativos.search');
-
+    Route::post('/permissions/search', [\App\Http\Controllers\PermissionController::class, 'search'])->name('permissions.search');
+    Route::post('/roles/search', [\App\Http\Controllers\RoleController::class, 'search'])->name('roles.search');
 });

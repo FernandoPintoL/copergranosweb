@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdatePermissionRequest extends FormRequest
 {
@@ -23,10 +24,7 @@ class UpdatePermissionRequest extends FormRequest
     {
         $id = $this->route('permission')->id;
         return [
-            'name' => [
-                'required',
-                Rule::unique('permissions')->ignore($id),
-            ],
+            'name' => ['required', 'unique:permissions,name,' . $id, 'max:255'],
         ];
     }
 }
