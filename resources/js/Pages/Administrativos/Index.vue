@@ -122,11 +122,11 @@ const destroyData = async (id) => {
                             </div>
                         </form>
                     </div>
-                    <!--                    <Link :href="route(route_model+'.create')"
-                                              class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
-                                            <i class="fa-solid fa-plus"></i>
-                                            Agregar {{ route_model }}
-                                        </Link>-->
+                    <Link :href="route(route_model+'.create')"
+                          class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+                        <i class="fa-solid fa-plus"></i>
+                        Agregar {{ route_model }}
+                    </Link>
                 </div>
             </div>
         </div>
@@ -157,13 +157,13 @@ const destroyData = async (id) => {
                 <tr v-for="item in datas.list" :key="item.id"
                     class="hover:bg-gray-100 dark:hover:bg-gray-700">
                     <td class="px-6 py-3 whitespace-nowrap dark:text-white">
-                        {{ item.id }}
+                        {{ item.persona_id }}
                     </td>
                     <td class="px-6 py-3 whitespace-nowrap dark:text-white">
-                        {{ item.name.toUpperCase()}}
+                        {{ item.persona.nombre }}
                     </td>
                     <td class="px-6 py-3 whitespace-nowrap dark:text-white">
-                        {{ item.email }}
+                        {{ item.persona.correo }}
                     </td>
                     <td class="px-6 py-3 whitespace-nowrap dark:text-white">
                         <p>Creado: {{ Utils.fecha(item.created_at) }}</p>
@@ -171,7 +171,7 @@ const destroyData = async (id) => {
                     </td>
 
                     <td class="p-4 space-x-2 whitespace-nowrap">
-                        <Link :href="route(route_model+'.edit', item.id)"
+                        <Link :href="route(route_model+'.edit', item.persona_id)"
                               class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                             <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"
                                  xmlns="http://www.w3.org/2000/svg">

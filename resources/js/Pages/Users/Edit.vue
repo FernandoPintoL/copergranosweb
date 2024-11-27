@@ -1,7 +1,7 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import {ref, inject, reactive, onMounted, computed} from 'vue'
-import {Link, router, useForm} from '@inertiajs/vue3'
+import {inject, reactive, onMounted, computed} from 'vue'
+import {useForm} from '@inertiajs/vue3'
 import SectionBorder from '@/Components/SectionBorder.vue'
 import Utils from "@/Utils/Utils.js";
 

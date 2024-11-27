@@ -9,11 +9,17 @@ class Persona extends Model
 {
     /** @use HasFactory<\Database\Factories\PersonaFactory> */
     use HasFactory;
-    protected $table = 'persona';
+    protected $table = 'personas';
     protected $fillable = [
         'nombre',
         'direccion',
-        'telefono'
+        'telefono',
+        'correo',
     ];
+
+    public function administrativo()
+    {
+        return $this->hasOne(Administrativo::class);
+    }
 
 }
