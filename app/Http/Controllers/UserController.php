@@ -49,9 +49,27 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        //
+        $roles = Role::all();
+        $permissions = Permission::all();
+        $model_roles = $user->getRoleNames();
+        $model_permissions = $user->getAllPermissions()->pluck('name');
+        // dd($model_permissions);
+        $user_adm = auth()->user();
+        $crear = $user_adm->canCrear('USER');
+        $editar = $user_adm->canEditar('USER');
+        $eliminar = $user_adm->canEliminar('USER');
+        return Inertia::render("Users/Edit", [
+            'model' => $user,
+            'roles' => $roles,
+            'permissions' => $permissions,
+            'model_roles' => $model_roles,
+            'model_permissions' => $model_permissions,
+            'crear' => $crear,
+            'editar' => $editar,
+            'eliminar' => $eliminar
+        ]);
     }
 
     /**

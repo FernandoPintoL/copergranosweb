@@ -3,7 +3,6 @@ import {ref, onMounted, reactive} from 'vue'
 import {Link} from '@inertiajs/vue3'
 import {useForm} from '@inertiajs/inertia-vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Table_To_Categorias from "@/My_Components/Table_To_Categorias.vue";
 import Utils from '@/Utils/Utils.js';
 import Swal from 'sweetalert2';
 import NavBody from "@/My_Components/NavBody.vue";
@@ -127,10 +126,6 @@ const destroyData = async (id) => {
                         <i class="fa-solid fa-plus"></i>
                         Agregar {{ route_model }}
                     </Link>
-                    <!--                    <Link :href="route(route_model+'.create')" class="px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                                            <i class="fa-solid fa-plus"></i>
-                                            Agregar {{ route_model }}
-                                        </Link>-->
                 </div>
             </div>
         </div>
