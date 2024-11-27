@@ -5,7 +5,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import TableList from "@/My_Components/TableList.vue";
 import {Link} from "@inertiajs/vue3";
 import {onMounted, reactive, ref} from "vue";
-import {useForm} from "@inertiajs/inertia-vue3";
+import {useForm, usePage} from "@inertiajs/inertia-vue3";
 import Swal from "sweetalert2";
 
 const props = defineProps({
@@ -25,6 +25,9 @@ const props = defineProps({
         type: Boolean,
         default: true, // Valor por defecto puede ser true o false
     },
+    flash: Object, // Define flash prop
+    success: String,
+    error: String
 });
 
 onMounted(() => {
@@ -50,8 +53,9 @@ const datas = reactive({
 })
 
 const search = async () => {
+    console.log(query.value)
     try {
-        const response = await axios.get(`/api/${route_model}/search`, {params: {query: query.value.toString().toUpperCase()}});
+        const response = await axios.post(route(route_model + ".search", query.value.toUpperCase()));
         datas.list = response.data;
     } catch (error) {
         console.error(error);
@@ -76,6 +80,12 @@ const destroyMessage = (id) => {
     })
 }
 
+/*const destroyMessage = (id) => Utils.swalConfirmDelete((id) => {
+    datas.isLoad = true;
+    destroyData(id);
+    datas.isLoad = false;
+});*/
+
 const destroyData = async (id) => {
     form.id = id;
     form.delete(route(route_model + ".destroy", form.id), {
@@ -98,7 +108,6 @@ const destroyData = async (id) => {
         }
     })
 }
-
 </script>
 
 <template>
@@ -110,7 +119,7 @@ const destroyData = async (id) => {
                 <div
                     class="items-center justify-between block sm:flex md:divide-x md:divide-gray-100 dark:divide-gray-700">
                     <div class="flex items-center mb-4 sm:mb-0">
-                        <form class="sm:pr-3" action="#" method="GET">
+                        <div class="sm:pr-3">
                             <label :for="'table-search-'+route_model" class="sr-only">Busqueda de {{
                                     route_model
                                 }}</label>
@@ -120,7 +129,7 @@ const destroyData = async (id) => {
                                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                        :placeholder="'Busqueda de '+route_model">
                             </div>
-                        </form>
+                        </div>
                     </div>
                     <Link :href="route(route_model+'.create')"
                           class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
@@ -129,12 +138,26 @@ const destroyData = async (id) => {
                     </Link>
                 </div>
             </div>
+            <!-- Display flash message -->
+            <div v-if="props.flash && props.flash.error" class="mb-4 text-red-600">
+                {{ props.flash.error }}
+                {{ props.error }}
+            </div>
+
+            <div v-if="props.flash && props.flash.success" class="mb-4 text-green-600">
+                {{ props.flash.success }}
+                {{ props.success }}
+            </div>
         </div>
         <TableList>
             <template #tbl-header>
                 <th scope="col"
                     class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
                     Id
+                </th>
+                <th scope="col"
+                    class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                    CI
                 </th>
                 <th scope="col"
                     class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
@@ -160,6 +183,9 @@ const destroyData = async (id) => {
                         {{ item.persona_id }}
                     </td>
                     <td class="px-6 py-3 whitespace-nowrap dark:text-white">
+                        {{ item.ci }}
+                    </td>
+                    <td class="px-6 py-3 whitespace-nowrap dark:text-white">
                         {{ item.persona.nombre }}
                     </td>
                     <td class="px-6 py-3 whitespace-nowrap dark:text-white">
@@ -183,7 +209,7 @@ const destroyData = async (id) => {
                             </svg>
                             Editar
                         </Link>
-                        <button type="button" v-if="props.eliminar" @click="destroyMessage(item.id)"
+                        <button type="button" v-if="props.eliminar" @click="destroyMessage(item.persona_id)"
                                 class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900">
                             <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"
                                  xmlns="http://www.w3.org/2000/svg">

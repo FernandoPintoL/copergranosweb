@@ -17,7 +17,7 @@ class Persona extends Model
         'correo',
     ];
 
-    public function administrativo()
+    public function administrativo(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(Administrativo::class);
     }

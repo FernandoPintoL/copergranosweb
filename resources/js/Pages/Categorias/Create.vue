@@ -1,8 +1,27 @@
 <script setup>
-import { useForm} from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
 
 const route_model = "categorias"
+
+const props = defineProps({
+    model: Object,
+    roles: Object,
+    permissions: Object,
+    crear: {
+        type: Boolean,
+        default: false, // Valor por defecto puede ser true o false
+    },
+    editar: {
+        type: Boolean,
+        default: false, // Valor por defecto puede ser true o false
+    },
+    eliminar: {
+        type: Boolean,
+        default: false, // Valor por defecto puede ser true o false
+    },
+    flash: Object // Define flash prop
+})
 
 const form = useForm({
     sigla: '',
@@ -21,6 +40,7 @@ const input_detalle = () => {
 const submit = () => {
     form.post('/'+route_model);
 };
+
 </script>
 
 <template>
@@ -28,6 +48,11 @@ const submit = () => {
         <section class="bg-white dark:bg-gray-900">
             <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Agregar {{ route_model }}</h2>
+                <!-- Display flash message -->
+                <div v-if="props.flash && props.flash.error" class="mb-4 text-red-600">
+                    {{ props.flash.error }}
+                </div>
+
                 <form @submit.prevent="submit">
                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                         <div class="sm:col-span-2">
