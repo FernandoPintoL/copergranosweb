@@ -1,13 +1,15 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import {useForm} from '@inertiajs/vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SectionBorder from "@/Components/SectionBorder.vue";
+import {onMounted, reactive} from "vue";
 
 const route_model = "roles"
 
 const props = defineProps({
     model: Object,
     permissions: Object,
+    model_permissions: Object,
     crear: {
         type: Boolean,
         default: false, // Valor por defecto puede ser true o false
@@ -23,9 +25,19 @@ const props = defineProps({
     flash: Object // Define flash prop
 })
 
+onMounted(() => {
+    console.log("roles asignados mi rol")
+    console.log(props.model_permissions)
+    reactives.list_permissions = props.permissions
+})
+
+const reactives = reactive({
+    list_permissions: [],
+})
+
 const form = useForm({
-    name: '',
-    permissions: [],
+    name: props.model.name ?? '',
+    permissions: props.model_permissions ?? [],
 });
 
 
@@ -38,16 +50,16 @@ const input_detalle = () => {
 };
 
 const submit = () => {
-    form.post('/'+route_model);
+    form.post('/' + route_model);
 };
 
 </script>
 
 <template>
-    <AppLayout :title="'Crear '+route_model" >
+    <AppLayout :title="'Editar '+route_model">
         <section class="bg-white dark:bg-gray-900">
             <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
-                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Agregar {{ route_model }}</h2>
+                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Editar {{ route_model }} #{{ props.model.id}}</h2>
                 <!-- Display flash message -->
                 <div v-if="props.flash && props.flash.error" class="mb-4 text-red-600">
                     {{ props.flash.error }}
@@ -71,7 +83,7 @@ const submit = () => {
                                 Permisos para asignar
                             </h3>
                             <div class="grid grid-cols-2 gap-2">
-                                <div v-for="item in props.permissions" :key="item.id">
+                                <div v-for="item in reactives.list_permissions" :key="item.id">
                                     <label :for="item.name + '-' + item.id"
                                            class="flex p-3 w-full bg-white border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
                                 <span class="text-sm text-gray-500 dark:text-neutral-400">
