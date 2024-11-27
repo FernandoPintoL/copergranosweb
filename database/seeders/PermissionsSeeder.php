@@ -46,5 +46,17 @@ class PermissionsSeeder extends Seeder
         $eliminar = Permission::create(['name' => 'MEDIDA.ELIMINAR']);
         $mostrar = Permission::create(['name' => 'MEDIDA.MOSTRAR']);
         $listar = Permission::create(['name' => 'MEDIDA.LISTAR']);
+
+        $crear = Permission::create(['name' => 'PROVEEDOR.CREAR']);
+        $editar = Permission::create(['name' => 'PROVEEDOR.EDITAR']);
+        $eliminar = Permission::create(['name' => 'PROVEEDOR.ELIMINAR']);
+        $mostrar = Permission::create(['name' => 'PROVEEDOR.MOSTRAR']);
+        $listar = Permission::create(['name' => 'PROVEEDOR.LISTAR']);
+
+        $crear = Permission::create(['name' => 'CLIENTE.CREAR']);
+        $editar = Permission::create(['name' => 'CLIENTE.EDITAR']);
+        $eliminar = Permission::create(['name' => 'CLIENTE.ELIMINAR']);
+        $mostrar = Permission::create(['name' => 'CLIENTE.MOSTRAR']);
+        $listar = Permission::create(['name' => 'CLIENTE.LISTAR']);
     }
 }

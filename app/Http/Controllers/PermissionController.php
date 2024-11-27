@@ -109,8 +109,8 @@ class PermissionController extends Controller
         ///return $permission;
         if ($permission->exists) {
             $permission->delete();
-            return redirect()->route('permissions.index')->with('flash.success', 'eliminado exitosamente.');
+            return redirect()->route('permissions.index')->with('success', 'Transaccion exitosa.');
         }
-        return redirect()->route('permissions.index')->with('flash.error', 'No se pudo eliminar el administrativo.');
+        return redirect()->route('permissions.index')->with('error', 'No se pudo eliminar.');
     }
 }

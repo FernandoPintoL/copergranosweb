@@ -110,7 +110,7 @@ class AdministrativoController extends Controller
             'salario' => $request->input('administrativo.salario'),
             'user_id' => $user->id,
         ]);
-        return redirect()->route('administrativos.index')->with('flash.success', 'Administrativo creado exitosamente.');
+        return redirect()->route('administrativos.index')->with('success', 'Administrativo creado exitosamente.');
     }
 
     /**
@@ -130,7 +130,7 @@ class AdministrativoController extends Controller
         $persona = $administrativo->persona;
 
         if (!$user) {
-            return redirect()->route('administrativos.index')->with('flash.error', 'User not found for this Administrativo.');
+            return redirect()->route('administrativos.index')->with('error', 'User not found for this Administrativo.');
         }
         return Inertia::render('Administrativos/Editar', [
             'model' => $administrativo,
@@ -184,7 +184,7 @@ class AdministrativoController extends Controller
             'salario' => $request->input('administrativo.salario'),
         ]);
 
-        return redirect()->route('administrativos.index')->with('flash.success', 'Administrativo actualizado exitosamente.');
+        return redirect()->route('administrativos.index')->with('success', 'Administrativo actualizado exitosamente.');
     }
 
     /**
@@ -208,6 +208,6 @@ class AdministrativoController extends Controller
         $administrativo->delete();
 
 
-        return redirect()->route('administrativos.index')->with('flash.success', 'Administrativo eliminado exitosamente.');
+        return redirect()->route('administrativos.index')->with('success', 'Administrativo eliminado exitosamente.');
     }
 }

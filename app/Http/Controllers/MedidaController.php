@@ -59,7 +59,7 @@ class MedidaController extends Controller
     public function store(StoreMedidaRequest $request)
     {
         Medida::create($request->all());
-        return redirect()->route('medidas.index');
+        return redirect()->route('medidas.index')->with('success', 'Transaccion exitosa.');
     }
 
     /**
@@ -88,7 +88,7 @@ class MedidaController extends Controller
     public function update(UpdateMedidaRequest $request, Medida $medida)
     {
         $medida->update($request->all());
-        return redirect()->route('medidas.index');
+        return redirect()->route('medidas.index')->with('success', 'Transaccion exitosa.');
     }
 
     /**
@@ -97,6 +97,6 @@ class MedidaController extends Controller
     public function destroy(Medida $medida)
     {
         $medida->delete();
-        return redirect()->route('medidas.index');
+        return redirect()->route('medidas.index')->with('success', 'Transaccion exitosa.');
     }
 }

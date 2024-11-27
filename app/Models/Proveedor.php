@@ -11,10 +11,10 @@ class Proveedor extends Model
     use HasFactory;
 
     protected $table = 'proveedores';
+    protected $primaryKey = 'persona_id';
     protected $fillable = [
-        'persona_id',
-        'empresa',
-        'correo'
+        'nit',
+        'razon_social'
     ];
 
     public function productos(): \Illuminate\Database\Eloquent\Relations\HasMany

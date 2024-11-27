@@ -67,7 +67,7 @@ class ProductoController extends Controller
     public function store(StoreProductoRequest $request)
     {
         Producto::create($request->all());
-        return redirect()->route('productos.index');
+        return redirect()->route('productos.index')->with('success', 'Transaccion exitosa.');
     }
 
     /**
@@ -96,7 +96,7 @@ class ProductoController extends Controller
     public function update(UpdateProductoRequest $request, Producto $producto)
     {
         $request->update($request->all());
-        return redirect()->route('productos.index');
+        return redirect()->route('productos.index')->with('success', 'Transaccion exitosa.');
     }
 
     /**
