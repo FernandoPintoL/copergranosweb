@@ -81,18 +81,11 @@ class ProveedorController extends Controller
             'telefono' => $request->input('persona.telefono'),
             'correo' => $request->input('persona.correo'),
         ]);
-
-        // Crear el proveedor con el persona_id
-        /*$proveedorData = $request->input('proveedor');
-        $proveedorData['persona_id'] = $persona->id;
-        Proveedor::create($proveedorData);*/
         $proveedor = $persona->proveedor()->create([
             'nit' => $request->input('proveedor.nit'),
             'razon_social' => $request->input('proveedor.razon_social'),
         ]);
-
-
-        return redirect()->route('proveedores.index')->with('success', 'Creado exitosamente.');
+        return redirect()->route('proveedores.index')->with('success', 'Transaccion exitosa.');
     }
 
     /**

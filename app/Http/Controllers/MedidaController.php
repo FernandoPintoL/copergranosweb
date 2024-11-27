@@ -78,7 +78,8 @@ class MedidaController extends Controller
         return Inertia::render('Medidas/Editar', ['model'=> $medida,
             'crear'=>$this->crear,
             'editar'=>$this->editar,
-            'eliminar'=>$this->eliminar
+            'eliminar'=>$this->eliminar,
+            'flash' => session('error') // Pass the flash message
         ]);
     }
 

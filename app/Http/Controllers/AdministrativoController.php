@@ -184,7 +184,7 @@ class AdministrativoController extends Controller
             'salario' => $request->input('administrativo.salario'),
         ]);
 
-        return redirect()->route('administrativos.index')->with('success', 'Administrativo actualizado exitosamente.');
+        return redirect()->route('administrativos.index')->with('success', 'Transaccion exitosa.');
     }
 
     /**
@@ -208,6 +208,6 @@ class AdministrativoController extends Controller
         $administrativo->delete();
 
 
-        return redirect()->route('administrativos.index')->with('success', 'Administrativo eliminado exitosamente.');
+        return redirect()->route('administrativos.index')->with('success', 'Transaccion exitosa.');
     }
 }

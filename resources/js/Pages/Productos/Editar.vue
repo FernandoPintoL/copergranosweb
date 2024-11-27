@@ -1,137 +1,181 @@
 <script setup>
-import { defineProps } from 'vue';
-import { useForm } from '@inertiajs/inertia-vue3';
+import { reactive, ref, inject } from 'vue';
+import { useForm } from '@inertiajs/vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Utils from '@/Utils/Utils.js';
 
-const route_model = "productos"
+const Swal = inject('$swal'); // SweetAlert para notificaciones
+
 const props = defineProps({
-    model: Object
+    model: Object,
+    medidas: Array,
+    categorias: Array,
+    proveedores: Array,
 });
 
 const form = useForm({
-    codigo: props.model.codigo,
-    nombre: props.model.nombre,
-    descripcion: props.model.descripcion,
-    precio: props.model.precio,
-    categoria_id: props.model.categoria_id,
-    medida_id: props.model.medida_id,
-    proveedor_id: props.model.proveedor_id
+    id: props.model?.id || '',
+    codigo: props.model?.codigo || '',
+    nombre: props.model?.nombre || '',
+    descripcion: props.model?.descripcion || '',
+    precio: props.model?.precio || '',
+    categoria_id: props.model?.categoria_id || '',
+    medida_id: props.model?.medida_id || '',
+    proveedor_id: props.model?.proveedor_id || '',
 });
 
-const input_codigo = () => {
-    form.codigo = form.codigo.toUpperCase();
+const state = reactive({
+    isLoading: false,
+    errors: {
+        codigo: '',
+        nombre: '',
+        descripcion: '',
+        precio: '',
+    },
+});
+
+const validateField = (field, value) => {
+    switch (field) {
+        case 'codigo':
+            state.errors.codigo = value.length < 3 ? 'El código debe tener al menos 3 caracteres.' : '';
+            form.codigo = value.toUpperCase();
+            break;
+        case 'nombre':
+            state.errors.nombre = value.length < 3 ? 'El nombre debe tener al menos 3 caracteres.' : '';
+            form.nombre = value.toUpperCase();
+            break;
+        case 'descripcion':
+            form.descripcion = value.toUpperCase();
+            break;
+        case 'precio':
+            state.errors.precio = isNaN(value) || value <= 0 ? 'El precio debe ser un número positivo.' : '';
+            form.precio = value;
+            break;
+    }
 };
 
-const input_nombre= () => {
-    form.detalle = form.detalle.toUpperCase();
-};
+const submitForm = async () => {
+    if (Object.values(state.errors).some(error => error !== '')) {
+        Swal.fire('Error', 'Corrige los errores antes de continuar.', 'error');
+        return;
+    }
 
-const input_descripcion = () => {
-    form.descripcion = form.descripcion.toUpperCase();
-};
-const submit = () => {
-    form.put(`/${route_model}/${props.model.id}`);
-};
+    state.isLoading = true;
 
-// const fecha = (fechaData) => {
-//     return moment.tz(fechaData, 'America/La_Paz').format('YYYY-MM-DD HH:MM a')
-// }
-
+    Swal.fire({
+        title: 'Confirmar edición',
+        text: '¿Estás seguro de guardar los cambios?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, guardar',
+        cancelButtonText: 'Cancelar',
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                await form.put(`/productos/${form.id}`);
+                Swal.fire('Éxito', 'Producto editado correctamente.', 'success');
+            } catch (error) {
+                console.error(error);
+                Swal.fire('Error', 'Hubo un problema al guardar el producto.', 'error');
+            }
+        }
+        state.isLoading = false;
+    });
+};
 </script>
-
 <template>
-    <AppLayout :title="'Crear'+route_model">
+    <AppLayout title="Editar Producto">
         <section class="bg-white dark:bg-gray-900">
             <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
-                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Editar producto</h2>
-                <p class="mb-4 text-gray-900 dark:text-white">Fecha Creado: {{ Utils.fecha(props.model.created_at) }}</p>
-                <p class="mb-4 text-gray-900 dark:text-white">Fecha Actualizado: {{ Utils.fecha(props.model.updated_at) }}</p>
-                <form @submit.prevent="submit">
+                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Editar Producto</h2>
+                <form @submit.prevent="submitForm">
                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+                        <!-- Código -->
                         <div class="sm:col-span-2">
                             <label for="codigo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Código</label>
                             <input
                                 v-model="form.codigo"
-                                @input="input_codigo"
-                                type="text" name="codigo" id="codigo"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Registra un codigo" required="">
-                            <div v-if="form.errors.codigo" class="text-red-600 mt-2">{{ form.errors.codigo }}</div>
+                                @input="e => validateField('codigo', e.target.value)"
+                                type="text" id="codigo"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                placeholder="Código del producto" required>
+                            <p v-if="state.errors.codigo" class="text-red-600 mt-2">{{ state.errors.codigo }}</p>
                         </div>
+
+                        <!-- Nombre -->
                         <div class="sm:col-span-2">
                             <label for="nombre" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
                             <input
                                 v-model="form.nombre"
-                                @input="input_nombre"
-                                type="text" name="nombre" id="nombre"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Registra un nombre">
-                            <div v-if="form.errors.nombre" class="text-red-600 mt-2">{{ form.errors.nombre }}</div>
+                                @input="e => validateField('nombre', e.target.value)"
+                                type="text" id="nombre"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                placeholder="Nombre del producto" required>
+                            <p v-if="state.errors.nombre" class="text-red-600 mt-2">{{ state.errors.nombre }}</p>
                         </div>
+
+                        <!-- Descripción -->
                         <div class="sm:col-span-2">
                             <label for="descripcion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripción</label>
-                            <input
+                            <textarea
                                 v-model="form.descripcion"
-                                @input="input_descripcion"
-                                type="text" name="descripcion" id="descripcion"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Registra una descripcion">
-                            <div v-if="form.errors.descripcion" class="text-red-600 mt-2">{{ form.errors.descripcion }}</div>
+                                @input="e => validateField('descripcion', e.target.value)"
+                                id="descripcion"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                placeholder="Descripción del producto"></textarea>
                         </div>
+
+                        <!-- Precio -->
                         <div class="sm:col-span-2">
                             <label for="precio" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Precio</label>
                             <input
-                                v-model="form.nombre"
-                                @input="input_nombre"
-                                type="text" name="nombre" id="nombre"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Registra un nombre">
-                            <div v-if="form.errors.nombre" class="text-red-600 mt-2">{{ form.errors.nombre }}</div>
+                                v-model="form.precio"
+                                @input="e => validateField('precio', e.target.value)"
+                                type="number" id="precio"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                placeholder="Precio del producto" required>
+                            <p v-if="state.errors.precio" class="text-red-600 mt-2">{{ state.errors.precio }}</p>
                         </div>
+
+                        <!-- Categoría -->
                         <div class="sm:col-span-2">
-                            <label for="categoria_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Categoria</label>
-                            <input
+                            <label for="categoria_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Categoría</label>
+                            <select
                                 v-model="form.categoria_id"
-                                @input="input_categoria_id"
-                                type="text" name="categoria_id" id="categoria_id"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Registra una categoria">
-                            <div v-if="form.errors.categoria_id" class="text-red-600 mt-2">{{ form.errors.categoria_id }}</div>
+                                id="categoria_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                <option v-for="cat in categorias" :key="cat.id" :value="cat.id">{{ cat.sigla }}</option>
+                            </select>
                         </div>
+
+                        <!-- Medida -->
                         <div class="sm:col-span-2">
                             <label for="medida_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Medida</label>
-                            <input
+                            <select
                                 v-model="form.medida_id"
-                                @input="input_medida_id"
-                                type="text" name="medida_id" id="medida_id"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Registra una medida">
-                            <div v-if="form.errors.medida_id" class="text-red-600 mt-2">{{ form.errors.medida_id }}</div>
+                                id="medida_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                <option v-for="med in medidas" :key="med.id" :value="med.id">{{ med.sigla }}</option>
+                            </select>
                         </div>
                         <div class="sm:col-span-2">
-                            <label for="proveedor_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Proveedor</label>
-                            <input
-                                v-model="form.proveedor_id"
-                                @input="input_proveedor_id"
-                                type="text" name="proveedor_id" id="proveedor_id"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Registra un proveedor">
+                            <label for="proveedor_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                Seleccione Proveedor
+                            </label>
+                            <select id="proveedor_id"
+                                    class="custom bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    v-model="form.proveedor_id">
+                                <option v-for="item in proveedor" :key="item.persona_id" :value="item.persona_id">
+                                    {{item.persona_id}}
+                                </option>
+                            </select>
                             <div v-if="form.errors.proveedor_id" class="text-red-600 mt-2">{{ form.errors.proveedor_id }}</div>
                         </div>
                     </div>
 
+                    <!-- Botón -->
                     <button type="submit"
-                            class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"
-                             xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
-                            <path fill-rule="evenodd"
-                                  d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                                  clip-rule="evenodd"></path>
-                        </svg>
-                        Editar {{ route_model }}
+                            class="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+                        Guardar Cambios
                     </button>
                 </form>
             </div>
