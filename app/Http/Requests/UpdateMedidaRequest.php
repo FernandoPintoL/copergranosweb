@@ -11,7 +11,7 @@ class UpdateMedidaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,7 @@ class UpdateMedidaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'sigla' => ['required', 'unique:medidas'],
         ];
     }
 }

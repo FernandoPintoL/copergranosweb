@@ -9,14 +9,15 @@ class Producto extends Model
 {
     /** @use HasFactory<\Database\Factories\ProductoFactory> */
     use HasFactory;
-    protected $table = 'producto';
+    protected $table = 'productos';
     protected $fillable = [
-        'nombre',
         'codigo',
+        'nombre',
         'descripcion',
         'precio',
         'categoria_id',
-        'medida_id'
+        'medida_id',
+        'proveedor_id'
     ];
     public function categoria(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
@@ -33,5 +34,9 @@ class Producto extends Model
     public function detalleCompra(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(DetalleCompra::class, 'producto_id', 'id');
+    }
+    public function proveedor(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Proveedor::class, 'proveedor_id', 'id');
     }
 }

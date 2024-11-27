@@ -15,4 +15,10 @@ class Proveedor extends Model
         'empresa',
         'correo'
     ];
+
+    public function productos(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Producto::class, 'proveedor_id', 'id');
+    }
+
 }

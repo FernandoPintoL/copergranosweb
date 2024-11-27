@@ -11,3 +11,4 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/categorias/search', [CategoriaController::class, 'search'])->name('categorias.search');
 Route::get('/administrativos/search', [AdministrativoController::class, 'search'])->name('administrativos.search');
+Route::get('/productos/search', [ProductoController::class, 'search'])->name('productos.search');
