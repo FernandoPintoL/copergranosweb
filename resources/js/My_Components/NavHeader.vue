@@ -1,6 +1,7 @@
 <script setup>
 import DropdownLink from "@/Components/DropdownLink.vue";
 import {router} from "@inertiajs/vue3";
+import ThemeDropdown from "@/Components/ThemeDropdown.vue";
 
 const props = defineProps({
     name: String,
@@ -39,6 +40,8 @@ const logout = () => {
                     </a>
                 </div>
                 <div class="flex items-center">
+                    <!-- Tema -->
+                    <ThemeDropdown />
                     <!-- Notifications -->
                     <button type="button" data-dropdown-toggle="notification-dropdown"
                             class="p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700">
