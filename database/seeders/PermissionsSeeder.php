@@ -41,6 +41,10 @@ class PermissionsSeeder extends Seeder
         $mostrar = Permission::create(['name' => 'CATEGORIA.MOSTRAR']);
         $listar = Permission::create(['name' => 'CATEGORIA.LISTAR']);
 
-
+        $crear = Permission::create(['name' => 'MEDIDA.CREAR']);
+        $editar = Permission::create(['name' => 'MEDIDA.EDITAR']);
+        $eliminar = Permission::create(['name' => 'MEDIDA.ELIMINAR']);
+        $mostrar = Permission::create(['name' => 'MEDIDA.MOSTRAR']);
+        $listar = Permission::create(['name' => 'MEDIDA.LISTAR']);
     }
 }

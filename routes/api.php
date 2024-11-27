@@ -9,5 +9,3 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/categorias/search', [CategoriaController::class, 'search'])->name('categorias.search');
-Route::get('/administrativos/search', [AdministrativoController::class, 'search'])->name('administrativos.search');
