@@ -35,7 +35,7 @@ class ClienteController extends Controller
     }
     public function index()
     {
-        return Inertia::render("Clientes/Index", [
+        return Inertia::render("Cliente/Index", [
             'listado' => Cliente::with('persona')->get(),
             'crear' => $this->crear,
             'editar' => $this->editar,
@@ -52,7 +52,7 @@ class ClienteController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Clientes/Create', [
+        return Inertia::render('Cliente/Create', [
             'crear' => $this->crear,
             'editar' => $this->editar,
             'flash' => [
@@ -75,9 +75,8 @@ class ClienteController extends Controller
         ]);
 
         $cliente = $persona->cliente()->create([
-            'nit' => $request->input('nit'),
-            'razon_social' => $request->input('razon_social'),
-            'tipo_cliente' => $request->input('tipo_cliente'),
+            'nit' => $request->input('cliente.nit'),
+            'razon_social' => $request->input('cliente.razon_social'),
         ]);
         return redirect()->route('clientes.index')->with('success', 'Cliente creado exitosamente.');
     }
@@ -98,7 +97,7 @@ class ClienteController extends Controller
         $cliente->load('persona');
 
 
-        return Inertia::render('Clientes/Editar', [
+        return Inertia::render('Cliente/Editar', [
             'model' => $cliente,
             'crear' => $this->crear,
             'editar' => $this->editar,
@@ -125,8 +124,8 @@ class ClienteController extends Controller
         $cliente->update([
             'nit' => $request->input('cliente.nit'),
             'razon_social' => $request->input('cliente.razon_social'),
-            'tipo_cliente' => $request->input('cliente.tipo_cliente'),
         ]);
+        return redirect()->route('clientes.index')->with('success', 'Transaccion exitosa.');
     }
 
     /**
@@ -134,6 +133,8 @@ class ClienteController extends Controller
      */
     public function destroy(Cliente $cliente)
     {
-        //
+        $cliente->persona()->delete();
+        $cliente->delete();
+        return redirect()->route('clientes.index')->with('success', 'Cliente eliminado exitosamente.');
     }
 }

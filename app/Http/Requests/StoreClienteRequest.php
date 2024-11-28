@@ -11,7 +11,7 @@ class StoreClienteRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,13 @@ class StoreClienteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'persona.nombre' => 'required|string|max:255',
+            'persona.direccion' => 'string|max:255',
+            'persona.telefono' => 'string|max:20',
+            'persona.correo' => 'required|email|max:255',
+            'cliente.nit' => 'required|string|max:20|unique:clientes,nit',
+            'cliente.razon_social' => 'required|string|max:255|unique:clientes,razon_social',
+
         ];
     }
 }
