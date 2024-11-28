@@ -89,7 +89,7 @@ class ProveedorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Proveedor $proveedor)
+    public function show(Proveedor $proveedore)
     {
         //
     }
@@ -97,26 +97,52 @@ class ProveedorController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Proveedor $proveedor)
+    public function edit(Proveedor $proveedore)
     {
-        //
+        $proveedore->load('persona');
+        return Inertia::render('Proveedores/Editar', [
+            'model' => $proveedore,
+            'crear' => $this->crear,
+            'editar' => $this->editar,
+            'eliminar' => $this->eliminar,
+            'flash' => [
+                'error' => session('error'),
+                'success' => session('success')
+            ],// Pass the flash message
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public
-    function update(UpdateProveedorRequest $request, Proveedor $proveedor)
+    public function update(UpdateProveedorRequest $request, Proveedor $proveedore)
     {
-        //
+        // Update persona data
+        $persona = $proveedore->persona;
+        $persona->update([
+            'nombre' => $request->input('persona.nombre'),
+            'direccion' => $request->input('persona.direccion'),
+            'telefono' => $request->input('persona.telefono'),
+            'correo' => $request->input('persona.correo'),
+        ]);
+
+        // Update administrativo data
+        $proveedore->update([
+            'nit' => $request->input('proveedor.nit'),
+            'razon_social' => $request->input('proveedor.razon_social'),
+        ]);
+
+        return redirect()->route('proveedores.index')->with('success', 'Transaccion exitosa.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public
-    function destroy(Proveedor $proveedor)
+    public function destroy(Proveedor $proveedore)
     {
-        //
+        // Debe eliminar la persona a la que es asociada
+        $proveedore->persona()->delete();
+        $proveedore->delete();
+        return redirect()->route('proveedores.index')->with('success', 'Transaccion exitosa.');
     }
 }

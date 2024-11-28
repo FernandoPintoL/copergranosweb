@@ -20,11 +20,23 @@ class CompraController extends Controller
 
     public function  __construct()
     {
-
+        $this->user = auth()->user();
+        $this->crear = $this->user->canCrear('COMPRA');
+        $this->editar = $this->user->canEditar('COMPRA');
+        $this->eliminar = $this->user->canEliminar('COMPRA');
     }
     public function index()
     {
-        //
+        return Inertia::render('Compras/Index', [
+            'listado' => Compra::with('cliente', 'detalleCompra.producto')->get(),
+            'crear' => $this->crear,
+            'editar' => $this->editar,
+            'eliminar' => $this->eliminar,
+            'flash' => [
+                'error' => session('error'),
+                'success' => session('success')
+            ],// Pass the flash message
+        ]);
     }
 
     /**
@@ -32,7 +44,7 @@ class CompraController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -40,7 +52,7 @@ class CompraController extends Controller
      */
     public function store(StoreCompraRequest $request)
     {
-        //
+
     }
 
     /**
@@ -56,7 +68,8 @@ class CompraController extends Controller
      */
     public function edit(Compra $compra)
     {
-        //
+
+
     }
 
     /**
