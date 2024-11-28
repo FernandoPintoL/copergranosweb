@@ -73,8 +73,6 @@ class ProveedorController extends Controller
      */
     public function store(StoreProveedorRequest $request)
     {
-        // Crear la persona
-        //$persona = Persona::create($request->input('persona'));
         $persona = Persona::create([
             'nombre' => $request->input('persona.nombre'),
             'direccion' => $request->input('persona.direccion'),

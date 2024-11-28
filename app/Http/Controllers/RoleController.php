@@ -69,7 +69,7 @@ class RoleController extends Controller
         ]);
         $model->syncPermissions($request->permissions);
 
-        return redirect()->route('roles.index')->with('success', 'Transaccion exitosa.');
+        return redirect()->route('roles.index')->with('flash.success', 'Creado exitosamente.');
     }
 
     /**
@@ -85,7 +85,7 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        //roles con permisos asignados
+        //roles con permisos asignados al rol mostrando solo los name
         $role->permissions = $role->permissions->pluck('name');
         return Inertia::render("Roles/Editar",
             [
@@ -104,7 +104,7 @@ class RoleController extends Controller
     public function update(UpdateRoleRequest $request, Role $role)
     {
         $role->update($request->validated());
-        return redirect()->route('roles.index')->with('success', 'Transaccion exitosa.');
+        return redirect()->route('roles.index')->with('flash.success', 'Creado exitosamente.');
     }
 
     /**
@@ -114,8 +114,8 @@ class RoleController extends Controller
     {
         if ($role->exists) {
             $role->delete();
-            return redirect()->route('permissions.index')->with('success', 'Transaccion exitosa.');
+            return redirect()->route('roles.index')->with('success', 'eliminado exitosamente.');
         }
-        return redirect()->route('permissions.index')->with('error', 'No se pudo eliminar.');
+        return redirect()->route('roles.index')->with('error', 'No se pudo eliminar.');
     }
 }

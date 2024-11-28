@@ -58,5 +58,11 @@ class PermissionsSeeder extends Seeder
         $eliminar = Permission::create(['name' => 'CLIENTE.ELIMINAR']);
         $mostrar = Permission::create(['name' => 'CLIENTE.MOSTRAR']);
         $listar = Permission::create(['name' => 'CLIENTE.LISTAR']);
+
+        $crear = Permission::create(['name' => 'COMPRA.CREAR']);
+        $editar = Permission::create(['name' => 'COMPRA.EDITAR']);
+        $eliminar = Permission::create(['name' => 'COMPRA.ELIMINAR']);
+        $mostrar = Permission::create(['name' => 'COMPRA.MOSTRAR']);
+        $listar = Permission::create(['name' => 'COMPRA.LISTAR']);
     }
 }
