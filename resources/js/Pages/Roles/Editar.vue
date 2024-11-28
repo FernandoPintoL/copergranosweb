@@ -50,7 +50,7 @@ const input_detalle = () => {
 };
 
 const submit = () => {
-    form.post('/' + route_model);
+    form.put(route(route_model + '.update', props.model.id));
 };
 
 </script>

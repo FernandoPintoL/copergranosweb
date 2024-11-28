@@ -116,6 +116,18 @@ const destroyData = async (id) => {
             class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700">
             <div class="w-full mb-1">
                 <NavBody :name="route_model"/>
+                <div class="block pb-2">
+                    <!-- Display flash message -->
+                    <div v-if="props.flash && props.flash.error" class="mb-4 text-red-600">
+                        {{ props.flash.error }}
+                        {{ props.error }}
+                    </div>
+
+                    <div v-if="props.flash && props.flash.success" class="mb-4 text-green-600">
+                        {{ props.flash.success }}
+                        {{ props.success }}
+                    </div>
+                </div>
                 <div
                     class="items-center justify-between block sm:flex md:divide-x md:divide-gray-100 dark:divide-gray-700">
                     <div class="flex items-center mb-4 sm:mb-0">
@@ -132,6 +144,7 @@ const destroyData = async (id) => {
                         </div>
                     </div>
                     <Link :href="route(route_model+'.create')"
+                          v-if="props.crear"
                           class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
                         <i class="fa-solid fa-plus"></i>
                         Agregar {{ route_model }}
@@ -159,8 +172,12 @@ const destroyData = async (id) => {
                 </th>
                 <th scope="col"
                     class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                    Creado/Actualizado
+                    Direccion
                 </th>
+<!--                <th scope="col"
+                    class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                    Creado/Actualizado
+                </th>-->
                 <th scope="col"
                     class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
                     Acciones
@@ -173,7 +190,7 @@ const destroyData = async (id) => {
                         {{ item.persona_id }}
                     </td>
                     <td class="px-6 py-3 whitespace-nowrap dark:text-white">
-                        {{ item.ci }}
+                        {{ item.nit }}
                     </td>
                     <td class="px-6 py-3 whitespace-nowrap dark:text-white">
                         {{ item.persona.nombre }}
@@ -182,12 +199,15 @@ const destroyData = async (id) => {
                         {{ item.persona.correo }}
                     </td>
                     <td class="px-6 py-3 whitespace-nowrap dark:text-white">
+                        {{ item.persona.direccion }}
+                    </td>
+<!--                    <td class="px-6 py-3 whitespace-nowrap dark:text-white">
                         <p>Creado: {{ Utils.fecha(item.created_at) }}</p>
                         <p>Actualizado: {{ Utils.fecha(item.updated_at) }}</p>
-                    </td>
-
+                    </td>-->
                     <td class="p-4 space-x-2 whitespace-nowrap">
                         <Link :href="route(route_model+'.edit', item.persona_id)"
+                              v-if="props.editar"
                               class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                             <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"
                                  xmlns="http://www.w3.org/2000/svg">

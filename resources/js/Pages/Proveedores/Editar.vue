@@ -1,10 +1,13 @@
 <script setup>
 import {useForm} from '@inertiajs/vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
+import {onMounted, reactive, ref} from "vue";
+import Utils from "@/Utils/Utils.js";
 
 const route_model = "proveedores"
 
 const props = defineProps({
+    model:Object,
     crear: {
         type: Boolean,
         default: false, // Valor por defecto puede ser true o false
@@ -23,17 +26,22 @@ const props = defineProps({
 const form = useForm({
     //datos de persona
     persona: {
-        nombre: '',
-        direccion: '',
-        telefono: '',
-        correo: ''
+        nombre: props.model.persona.nombre ?? '',
+        direccion: props.model.persona.direccion ?? '',
+        telefono: props.model.persona.telefono ?? '',
+        correo: props.model.persona.correo ?? ''
     },
     //datos de administrativo
     proveedor: {
-        nit: '',
-        razon_social: '',
+        nit: props.model.nit ?? '',
+        razon_social: props.model.razon_social ?? '',
     },
 });
+
+onMounted(() => {
+    console.log(props.model)
+})
+
 
 const input_name = (e) => {
     form.persona.nombre = e.target.value.toUpperCase();
@@ -41,11 +49,9 @@ const input_name = (e) => {
 
 
 const submit = () => {
-    console.log(form)
-    form.post('/' + route_model, {
-        onError: (errors) => {
-            console.log(errors);
-        }
+    console.log("envio de formulario")
+    form.put(route(route_model + ".update", props.model.persona_id), {
+        preserveScroll: true,
     });
 };
 </script>
@@ -54,7 +60,7 @@ const submit = () => {
     <AppLayout :title="'Editar '+route_model">
         <section class="bg-white dark:bg-gray-900">
             <div class="py-8 px-20 mx-auto lg:py-16">
-                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Agregar {{ route_model }}</h2>
+                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Editar {{ route_model }} #{{ props.model.persona_id }}</h2>
                 <!-- Display flash message -->
                 <div v-if="props.flash && props.flash.error" class="mb-4 text-red-600">
                     {{ props.flash.error }}
@@ -134,7 +140,7 @@ const submit = () => {
                     </div>
                     <button type="submit"
                             class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        <i class="fa-solid fa-plus pr-2"></i> Agregar {{ route_model }}
+                        <i class="fa-solid fa-plus pr-2"></i> Editar {{ route_model }}
                     </button>
                 </form>
             </div>

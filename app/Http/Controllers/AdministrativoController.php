@@ -135,6 +135,7 @@ class AdministrativoController extends Controller
         return Inertia::render('Administrativos/Editar', [
             'model' => $administrativo,
             'roles' => Role::all(),
+
             'permissions' => Permission::all(),
             'model_roles' => $administrativo->user->roles->pluck('name')->toArray(),
             'model_permissions' => $administrativo->user->permissions->pluck('name')->toArray(),
