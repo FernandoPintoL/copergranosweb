@@ -116,6 +116,18 @@ const destroyData = async (id) => {
             class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700">
             <div class="w-full mb-1">
                 <NavBody :name="route_model"/>
+                <div class="block pb-2">
+                    <!-- Display flash message -->
+                    <div v-if="props.flash && props.flash.error" class="mb-4 text-red-600">
+                        {{ props.flash.error }}
+                        {{ props.error }}
+                    </div>
+
+                    <div v-if="props.flash && props.flash.success" class="mb-4 text-green-600">
+                        {{ props.flash.success }}
+                        {{ props.success }}
+                    </div>
+                </div>
                 <div
                     class="items-center justify-between block sm:flex md:divide-x md:divide-gray-100 dark:divide-gray-700">
                     <div class="flex items-center mb-4 sm:mb-0">
@@ -139,16 +151,7 @@ const destroyData = async (id) => {
                     </Link>
                 </div>
             </div>
-            <!-- Display flash message -->
-            <div v-if="props.flash && props.flash.error" class="mb-4 text-red-600">
-                {{ props.flash.error }}
-                {{ props.error }}
-            </div>
 
-            <div v-if="props.flash && props.flash.success" class="mb-4 text-green-600">
-                {{ props.flash.success }}
-                {{ props.success }}
-            </div>
         </div>
         <TableList>
             <template #tbl-header>

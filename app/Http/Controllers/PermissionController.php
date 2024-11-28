@@ -66,7 +66,7 @@ class PermissionController extends Controller
         $model = Permission::create([
             'name' => $request->name
         ]);
-        return redirect()->route('permissions.index')->with('flash.success', 'Creado exitosamente.');
+        return redirect()->route('permissions.index')->with('success', 'Transaccion exitosa.');
     }
 
     /**
@@ -98,7 +98,7 @@ class PermissionController extends Controller
     public function update(UpdatePermissionRequest $request, Permission $permission)
     {
         $permission->update($request->validated());
-        return redirect()->route('permissions.index')->with('flash.success', 'Creado exitosamente.');
+        return redirect()->route('permissions.index')->with('success', 'Transaccion exitosa.');
     }
 
     /**
