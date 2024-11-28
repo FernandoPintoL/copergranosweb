@@ -5,12 +5,23 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCompraRequest;
 use App\Http\Requests\UpdateCompraRequest;
 use App\Models\Compra;
+use App\Models\Cliente;
+use App\Models\Producto;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class CompraController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $user;
+    protected $crear;
+    protected $editar;
+    protected $eliminar;
+
+    public function  __construct()
+    {
+
+    }
     public function index()
     {
         //
